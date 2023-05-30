@@ -5,7 +5,7 @@ var userHeplper=require('../helpers/user-helper')
 
 //middleware for authentication
 var sessionChecker=(req,res,next)=>{
-  console.log(req.session)
+ 
 
   if(req.session.user){
     next()
@@ -29,9 +29,10 @@ router.get('/home',sessionChecker,(req,res,next)=>{
 })
 
 router.post('/login',(req,res,next)=>{
-  // userHeplper.insertUser(req.body).then((result)=>{
+  req.session.user=req.body
+   // userHeplper.insertUser(req.body).then((result)=>{
 
-  // })
+//  })
 
   req.session.user=req.body
   res.redirect('/home')
@@ -52,14 +53,20 @@ router.get('/signup',(req,res,next)=>{
 
 router.get('/logout',(req,res,next)=>{
   req.session.destroy()
-  console.log(req.session)
+ 
   res.redirect('/')
 })
 
 
 router.post('/signup',(req,res,next)=>{
   req.session.user=req.body
-  
+
+  userHeplper.userSignUp(req.body).then((result)=>{
+    console.log(result)
+  })
+  // userHeplper.insetUser(req.body).then((result)=>{
+  //   console.log(result)
+  // })
   res.redirect('/home')
 })
 

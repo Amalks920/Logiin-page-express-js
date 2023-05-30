@@ -1,21 +1,31 @@
 const schema=require('../schema/userSchema');
 
-// console.log(schema)
 
 
+module.exports={
 
-// (async ()=>{
-//     const user=new schema({
-//         name:"amal",
-//         email:"amasod"
-//     }) 
-//     user.save().then(()=>{
-//         console.log('user saved')
-//     })
-// })();
+    //insert user details into db
+    
+    userSignUp:(userDetails)=>{
+       console.log(userDetails)
+        return new Promise(async(resolve,reject)=>{
+            const {username:username,email:email,password:password}=schema;
+            
+            const user= new schema({
+            username:userDetails.username,
+            email:userDetails.email,
+            password:userDetails.password
+        })
 
-// (async()=>{
-//     const findUser=await schema.findOne({name:"amal"})
-//     console.log(findUser)
-// })();
+        await user.save()
+
+        schema.findOne({username:user.username}).then((user)=>{
+            
+             resolve(user)
+          })
+          
+        })
+        
+    }
+}
 

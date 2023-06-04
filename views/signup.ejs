@@ -1,3 +1,18 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+
+
+
+
+
+
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,25 +34,32 @@
                               <h1 >Signup</h1>
                            </div>
                         </div>
-                        <form action="signup" method="post" name="registration">
+                        <form action="signup" onsubmit="return validateAll()" method="post" name="registration">
                            <div class="form-group">
                               <label for="exampleInputEmail1">First Name</label>
-                              <input type="text"   name="username" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
+                              <input type="name"  id="first-name"   name="username" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
+                              <p style="display: none;color: red;" id="min-p">min 3 characters</p>
                            </div>
                            <div class="form-group">
                               <label for="exampleInputEmail1">Last Name</label>
-                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter Lastname">
+                              <input type="text" id="second-name"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter Lastname">
+                              <p style="display: none;color: red;" id="min2-p">min 2 characters</p>
+
                            </div>
                            <div class="form-group">
                               <label for="exampleInputEmail1">Email address</label>
-                              <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                              <input type="email" id="email" name="email"  class="form-control"  aria-describedby="emailHelp" placeholder="Enter email">
+                              <p style="display: none;color: red;" id="email-err">invalid Email</p>
+
                            </div>
                            <div class="form-group">
                               <label for="exampleInputEmail1">Password</label>
-                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                              <input type="password" id="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                              <!-- <p style="display: none;color: red;" id="password-err">invalid Password</p> -->
+
                            </div>
                            <div class="col-md-12 text-center mb-3">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
+                              <button type="submit"  class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
                            </div>
                            <div class="col-md-12 ">
                               <div class="form-group">
@@ -51,4 +73,144 @@
 		</div>
       </div>   
          
+
+      <script>
+         let firstName=document.getElementById('first-name')
+
+         let minErrBtn=document.getElementById('min-p')
+         
+
+         function checkFirstName(){
+            let firstName=document.getElementById('first-name')
+
+            var regex=/^[A-Za-z]{3,}/
+            
+            if(regex.test(firstName.value))  return true
+            else return false
+         
+      }
+         
+
+         //add eventListener
+         firstName.addEventListener('keyup',()=>{
+
+            if(!checkFirstName()){
+               console.log(checkFirstName)
+            minErrBtn.style.display="block"
+            }else{
+               console.log(checkFirstName())
+               minErrBtn.style.display="none" 
+            }
+         })
+
+         //validate secondname
+         let secondName=document.getElementById('second-name')
+
+         let minErrBtn2=document.getElementById('min2-p')
+
+         function checkSecondName(){
+            let secondName=document.getElementById('second-name')
+
+            var regex=/^[A-Za-z]{2,}/
+            
+            if(regex.test(secondName.value))  return true
+            else return false
+         
+      }
+
+      secondName.addEventListener('keyup',()=>{
+
+if(!checkSecondName()){
+   console.log(checkSecondName)
+minErrBtn2.style.display="block"
+}else{
+   console.log(checkFirstName())
+   minErrBtn2.style.display="none" 
+}
+})
+
+
+//email id validation
+
+//input field which contains email id
+
+const email=document.getElementById('email')
+
+//element which displays err if you enter invalid email id
+let emailErr=document.getElementById('email-err')
+
+
+
+function validateEmail(){
+   //update email variable each time when check email function called
+   let email=document.getElementById('email')
+   let emailErr=document.getElementById('email-err')
+
+   var regex=/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
+   
+   //test function returns boolean value 
+   //return true if test function return true.it means that email entered by user is valid
+   //return false if test function return false.it means that email entered by user is invalid
+   if(regex.test(email.value))  return true
+   else return false
+}
+
+
+email.addEventListener('keyup',()=>{
+
+if(!validateEmail()){
+   
+emailErr.style.display="block"
+}else{
+   
+   emailErr.style.display="none" 
+}
+})
+
+
+//validatepassword
+
+let password=document.getElementById('password')
+
+let passwordErr=document.getElementById('password-err')
+
+function validatePassword(){
+   let password=document.getElementById('password')
+
+   var regex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])[a-zA-Z0-9!@#$%^&*()_+]{8,}$/
+   
+   if(regex.test(password.value))  return true
+   else return false
+
+}
+
+
+password.addEventListener('keyup',()=>{
+
+if(!validatePassword()){
+   
+passwordErr.style.display="block"
+}else{
+   
+   passwordErr.style.display="none" 
+}
+})
+
+
+
+
+
+
+        let validateAll=()=>{
+            if(checkFirstName() && checkSecondName() && validateEmail()){
+               return true
+            }else{
+               return false
+            }
+        }
+      </script>
 </body>
+
+
+
+</html>

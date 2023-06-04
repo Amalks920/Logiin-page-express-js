@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var userHeplper=require('../helpers/user-helper')
+var userHeplper=require('../helpers/user-helper');
+const user = require('../schema/userSchema');
 
 
 //middleware for authentication
@@ -10,32 +11,35 @@ var sessionChecker=(req,res,next)=>{
   if(req.session.user){
     next()
   }else{
-    res.redirect('/')
+    res.render('index')
   }
 }
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  if(req.session.user){
-    res.redirect('/home');
-  }else{
-    res.render('index')
-  }
+router.get('/',sessionChecker,function(req, res, next) {
+  
+  res.render('home')
  
 });
 
-router.get('/home',sessionChecker,(req,res,next)=>{
-  res.render('home')
-})
+// router.get('/home',sessionChecker,(req,res,next)=>{
+//   // res.render('home')
+// })
 
 router.post('/login',(req,res,next)=>{
-  req.session.user=req.body
-   // userHeplper.insertUser(req.body).then((result)=>{
+  
+  
+   userHeplper.userLogin(req.body).then((result)=>{
+      console.log(result)
+      if(result===true){
+        req.session.user=req.body
+        res.redirect('/')
+   }else{ 
+    res.render('index')
+  }
+ })
 
-//  })
-
-  req.session.user=req.body
-  res.redirect('/home')
+  
   
     
 })
@@ -43,15 +47,19 @@ router.post('/login',(req,res,next)=>{
 //signup
 
 router.get('/signup',(req,res,next)=>{
-  if(req.session.user){
-    res.redirect('/home')
-  }else{
-    res.render('signup')
-  }
+  
+ 
+    if(req.session.user){
+      res.redirect('/')
+    }else{
+      res.render('signup')  
+
+    }
+
   
 })
 
-router.get('/logout',(req,res,next)=>{
+router.get('/logout',sessionChecker,(req,res,next)=>{
   req.session.destroy()
  
   res.redirect('/')
@@ -59,15 +67,15 @@ router.get('/logout',(req,res,next)=>{
 
 
 router.post('/signup',(req,res,next)=>{
-  req.session.user=req.body
+  
 
   userHeplper.userSignUp(req.body).then((result)=>{
-    console.log(result)
+    res.redirect('/')
   })
   // userHeplper.insetUser(req.body).then((result)=>{
   //   console.log(result)
   // })
-  res.redirect('/home')
+  
 })
 
 
